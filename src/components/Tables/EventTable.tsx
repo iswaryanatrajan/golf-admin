@@ -17,7 +17,7 @@ const EventTable = () => {
   }, [refreshing]);
 
   const handleDelete = async (eventId: any, eventName: any) => {
-    const confirmed = window.confirm("Are you sure you want to delete this event? " + eventName);
+    const confirmed = window.confirm("Are you sure you want to delete this event'" + eventName + "'?");
     if (confirmed) {
       isLoading(true);
       await deleteEvent(eventId, isLoading);
