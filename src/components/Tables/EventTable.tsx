@@ -1,12 +1,30 @@
-import { deleteEvent } from '../../api/Events';
+import { useEffect, useState } from "react";
+import { deleteEvent,fetchEvents } from '../../api/Events';
 import { frontEnd } from '../../api/apiConfig';
 import { eventContextStore } from '../../contexts/EventContext';
 
 const EventTable = () => {
   const { events, isLoading } = eventContextStore();
-  const handleDelete = (eventId: any) => {
-    deleteEvent(eventId, isLoading);
+  const [refreshing, setRefreshing] = useState(false);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [count, setCount] = useState(0);
+  const [localEvents, setLocalEvents] = useState(events); // local state for live update
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    fetchEvents(setLocalEvents, setCount, token, pageNumber, pageSize);
+  }, [refreshing]);
+
+  const handleDelete = async (eventId: any, eventName: any) => {
+    const confirmed = window.confirm("Are you sure you want to delete this event? " + eventName);
+    if (confirmed) {
+      isLoading(true);
+      await deleteEvent(eventId, isLoading);
+      setRefreshing((prev) => !prev); // trigger re-fetch
+    }
   };
+
 
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
@@ -123,7 +141,7 @@ const EventTable = () => {
                       </svg>
                     </button>
                     <button className="hover:text-primary" onClick={()=>{
-                      handleDelete(item.id);
+                      handleDelete(item.id,item.eventName);
                     }}>
                       <svg
                         className="fill-current"

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { API_ENDPOINTS } from './apiConfig';
+import toast from "react-hot-toast";
 
 export interface IUser {
   nickName: string;
@@ -40,6 +41,11 @@ export const loginUser = async (formData: any, setToken: any): Promise<boolean> 
   } catch (error) {
     // Handle errors here
     console.error('Login error:', error);
+    if (axios.isAxiosError(error) && error.response && error.response.status === 401) {
+      toast.error("Login error. Please log in again.");
+      localStorage.clear();
+    }
+    
     return false; 
   }
 };
