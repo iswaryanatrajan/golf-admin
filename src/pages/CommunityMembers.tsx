@@ -111,10 +111,27 @@ const users = [
 
 const Table = () => {
   const [filterIndex, setFilterIndex] = useState(null);
-  const [visibleColumns, setVisibleColumns] = useState(events.map(() => true));
+  const [visibleColumns, setVisibleColumns] = useState([
+    true, // ID (always visible)
+    true, // Name (always visible)
+    true, // 活動地域_海外
+    true, // 平均スコア
+    true, // 性別
+    true, // メールアドレス
+    true, // 電話番号
+    true, // フリガナ
+    true, // 活動地域
+    true, // 顔写真
+    true, // 名刺
+    true, // お名前
+    ...events.map(() => true), // Event columns
+  ]);
   const [eventColumnFilters, setEventColumnFilters] = useState(events.map(() => "all"));
 
   const toggleColumn = (index) => {
+
+    if (index === 0 || index === 1) return;
+    
     const newState = [...visibleColumns];
     newState[index] = !newState[index];
     setVisibleColumns(newState);
@@ -145,51 +162,92 @@ const Table = () => {
         <table className="min-w-full text-sm">
           {/* Row for Hidden Columns */}
           <thead>
-            <tr className="bg-gray-100 dark:bg-gray-800">
-              {events.map((event, index) => (
-                !visibleColumns[index] && (
-                  <th key={index} className="px-2 py-1 text-center">
-                    <label className="flex flex-col items-center space-y-1 text-xs">
-                      <span>{event}</span>
-                      <input
-                        type="checkbox"
-                        checked={visibleColumns[index]}
-                        onChange={() => toggleColumn(index)}
-                        className="cursor-pointer"
-                      />
-                    </label>
-                  </th>
-                )
-              ))}
-            </tr>
-          </thead>
+  <tr className="bg-gray-100 dark:bg-gray-800">
+    {visibleColumns.map((isVisible, index) => {
+      // Skip ID (index 0) and Name (index 1) since they are always visible
+      if (index === 0 || index === 1) return null;
+
+      // Display hidden columns with checkboxes
+      if (!isVisible) {
+        const columnName =
+          index < 12
+            ? [
+                "活動地域_海外",
+                "平均スコア",
+                "性別",
+                "メールアドレス",
+                "電話番号",
+                "フリガナ",
+                "活動地域",
+                "顔写真",
+                "名刺",
+                "お名前",
+              ][index - 2]
+            : events[index - 12]; // Event columns
+
+        return (
+          <th key={index} className="px-2 py-1 text-center">
+            <label className="flex flex-col items-center space-y-1 text-xs">
+              <span>{columnName}</span>
+              <input
+                type="checkbox"
+                checked={isVisible}
+                onChange={() => toggleColumn(index)}
+                className="cursor-pointer"
+              />
+            </label>
+          </th>
+        );
+      }
+
+      return null;
+    })}
+  </tr>
+</thead>
 
           {/* Main Table Header */}
           <thead className="bg-[#5f6cb8] text-left dark:bg-meta-4 text-white">
             <tr>
               <th className="px-2 py-1">ID</th>
               <th className="px-2 py-1 whitespace-nowrap">表示名</th>
-              <th className="px-2 py-1 whitespace-nowrap break-words">活動地域_海外</th>
-              <th className="px-2 py-1 whitespace-nowrap break-words">平均スコア</th>
-              <th className="px-2 py-1 whitespace-nowrap break-words">性別</th>
-              <th className="px-2 py-1 whitespace-nowrap">メールアドレス</th>
-              <th className="px-2 py-1 whitespace-nowrap">電話番号</th>
-              <th className="px-2 py-1 whitespace-nowrap">フリガナ</th>
-              <th className="px-2 py-1 whitespace-nowrap">活動地域</th>
-              <th className="px-2 py-1 whitespace-nowrap">顔写真</th>
-              <th className="px-2 py-1 whitespace-nowrap">名刺</th>
-              <th className="px-2 py-1 whitespace-nowrap">お名前</th>
+                {/* Other columns with checkboxes */}
+    {[
+      "活動地域_海外",
+      "平均スコア",
+      "性別",
+      "メールアドレス",
+      "電話番号",
+      "フリガナ",
+      "活動地域",
+      "顔写真",
+      "名刺",
+      "お名前",
+    ].map((columnName, index) => 
+      visibleColumns[index + 2] && (
+      <th key={index + 2} className="px-2 py-1 whitespace-nowrap break-words">
+        <div className="flex flex-col items-center">
+          <span>{columnName}</span>
+          <label className="flex items-center space-x-1 text-xs mt-1">
+            <input
+              type="checkbox"
+              checked={visibleColumns[index + 2]} // Adjust index for columns after Name
+              onChange={() => toggleColumn(index + 2)}
+            />
+          </label>
+        </div>
+      </th>
+    ))}
+
               {events.map((event, index) =>
-                visibleColumns[index] && (
-                  <th key={index} className="px-2 py-1 whitespace-normal break-words border-r">
+                visibleColumns[index + 12] && (
+                  <th key={index + 12} className="px-2 py-1 whitespace-normal break-words border-r">
                     <div className="flex flex-col items-center">
                       <label className="flex items-center space-x-1 text-xs mt-1">
                         <input
                           type="checkbox"
-                          checked={visibleColumns[index]}
-                          onChange={() => toggleColumn(index)}
+                          checked={visibleColumns[index + 12]}
+                          onChange={() => toggleColumn(index + 12)}
                         />
-                        <span>表示</span>
                       </label>
                       <div className="text-sm">{event}</div>
                       <button
@@ -199,12 +257,12 @@ const Table = () => {
                           setEventColumnFilters(newFilters);
                         }}
                         className={`mt-1 text-xs px-2 py-0.5 rounded ${
-                          eventColumnFilters[index] === "1"
+                          eventColumnFilters[index ] === "1"
                             ? "bg-green-400 text-white"
                             : "bg-gray-200 text-gray-800"
                         }`}
                       >
-                        🔁 {eventColumnFilters[index] === "1" ? "1" : "All"}
+                        🔁 {eventColumnFilters[index ] === "1" ? "1" : "All"}
                       </button>
                     </div>
                   </th>
@@ -229,24 +287,36 @@ const Table = () => {
                 <tr key={rowIndex} className="hover:bg-gray-50">
                   <td className="px-2 py-1 border-b border-[#eee] dark:border-strokedark">{user.id}</td>
                   <td className="px-2 py-1 border-b border-[#eee] dark:border-strokedark">{user.displayName}</td>
-                  <td className="px-2 py-1 border-b border-[#eee] dark:border-strokedark">{user.regionAbroad}</td>
-                  <td className="px-2 py-1 border-b border-[#eee] dark:border-strokedark">{user.avgScore}</td>
-                  <td className="px-2 py-1 border-b border-[#eee] dark:border-strokedark">{user.gender}</td>
-                  <td className="px-2 py-1 border-b border-[#eee] dark:border-strokedark">{user.email}</td>
-                  <td className="px-2 py-1 border-b border-[#eee] dark:border-strokedark">{user.phone}</td>
-                  <td className="px-2 py-1 border-b border-[#eee] dark:border-strokedark">{user.furigana}</td>
-                  <td className="px-2 py-1 border-b border-[#eee] dark:border-strokedark">{user.region}</td>
-                  <td className="px-2 py-1 border-b border-[#eee] dark:border-strokedark">{user.facePhoto}</td>
-                  <td className="px-2 py-1 border-b border-[#eee] dark:border-strokedark">{user.businessCard}</td>
-                  <td className="px-2 py-1 border-b border-[#eee] dark:border-strokedark">{user.name}</td>
+ {/* Other columns */}
+ {[
+          user.regionAbroad,
+          user.avgScore,
+          user.gender,
+          user.email,
+          user.phone,
+          user.furigana,
+          user.region,
+          user.facePhoto,
+          user.businessCard,
+          user.name,
+        ].map((value, index) => (
+          <td
+            key={index + 2}
+            className={`px-2 py-1 border-b border-[#eee] dark:border-strokedark ${
+              visibleColumns[index + 2] ? "" : "hidden"
+            }`}
+          >
+            {value}
+          </td>
+        ))}
                   {user.events.map((value, index) => (
                     <td
-                      key={index}
+                      key={index +12}
                       className={`px-2 py-1 border-b border-r border-[#eee] dark:border-strokedark text-center ${
-                        visibleColumns[index] ? "" : "hidden"
+                        visibleColumns[index +12 ] ? "" : "hidden"
                       }`}
                     >
-                      {visibleColumns[index] ? value : ""}
+                      {value}
                     </td>
                   ))}
                 </tr>
