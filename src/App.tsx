@@ -19,6 +19,7 @@ import { useAuth } from './contexts/AuthContext';
 import Teachers from './pages/Teachers';
 import Events from './pages/Events';
 import Users from './pages/Users';
+import CommunityMembers from './pages/CommunityMembers';
 import UpdatePost from './pages/UpdatePost';
 
 
@@ -130,6 +131,15 @@ function App() {
             <>
               <PageTitle title="Student | Golf" />
               <Users />
+            </>
+          }
+        />
+         <Route
+          path="/communitymembers"
+          element={
+            <>
+              <PageTitle title="Members | Golf" />
+              <CommunityMembers />
             </>
           }
         />
