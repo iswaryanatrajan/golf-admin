@@ -195,7 +195,7 @@ const Table = () => {
       {/* Table */}
       <div className="overflow-x-auto rounded-sm border border-stroke  shadow-default dark:border-strokedark dark:bg-boxdark rounded-md">
         <table className="min-w-full text-sm">
-          <thead className="bg-[#5f6cb8] bg-gray-2 text-left dark:bg-meta-4 text-white">
+          <thead className="bg-[#5f6cb8] text-left dark:bg-meta-4 text-white">
             <tr className="">
               <th className=" px-2 py-1">ID</th>
               <th className=" px-2 py-1 whitespace-nowrap">表示名</th>
