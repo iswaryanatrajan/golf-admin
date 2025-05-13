@@ -126,6 +126,27 @@ const Table = () => {
     true, // お名前
     ...events.map(() => true), // Event columns
   ]);
+  const [columnFilters, setColumnFilters] = useState([
+    "", // ID (no filter)
+    "", // Name (no filter)
+    "", // 活動地域_海外
+    "", // 平均スコア
+    "", // 性別
+    "", // メールアドレス
+    "", // 電話番号
+    "", // フリガナ
+    "", // 活動地域
+    "", // 顔写真
+    "", // 名刺
+    "", // お名前
+    ...events.map(() => ""), // Event columns
+  ]);
+  const [nonEmptyFilters, setNonEmptyFilters] = useState([
+    false, // ID (no filter)
+    false, // Name (no filter)
+    ...Array(10).fill(false), // Static columns
+    ...events.map(() => false), // Event columns
+  ]);
   const [eventColumnFilters, setEventColumnFilters] = useState(events.map(() => "all"));
 
   const toggleColumn = (index) => {
@@ -137,14 +158,37 @@ const Table = () => {
     setVisibleColumns(newState);
   };
 
-  const filteredUsers = users.filter((user) =>
-    user.events.every((val, i) => {
-      const filter = eventColumnFilters[i];
-      return (
-        filter === "all" || String(val) === filter
-      );
-    })
-  );
+  const filteredUsers = users.filter((user) => {
+    // Check static columns
+    const staticColumns = [
+      user.regionAbroad,
+      user.avgScore,
+      user.gender,
+      user.email,
+      user.phone,
+      user.furigana,
+      user.region,
+      user.facePhoto,
+      user.businessCard,
+      user.name,
+    ];
+  
+    for (let i = 0; i < staticColumns.length; i++) {
+       // Apply non-empty filter
+       if (nonEmptyFilters[i + 2] && !staticColumns[i]) {
+        return false;
+      }
+    }
+  
+    // Check event columns
+    for (let i = 0; i < user.events.length; i++) {
+      if (columnFilters[i + 12] && String(user.events[i]) !== columnFilters[i + 12]) {
+        return false;
+      }
+    }
+  
+    return true;
+  });
 
   return (
     <DefaultLayout>
@@ -234,6 +278,19 @@ const Table = () => {
               onChange={() => toggleColumn(index + 2)}
             />
           </label>
+         {/* Non-Empty Filter Toggle */}
+         <button
+          onClick={() => {
+            const newFilters = [...nonEmptyFilters];
+            newFilters[index + 2] = !nonEmptyFilters[index + 2];
+            setNonEmptyFilters(newFilters);
+          }}
+          className={`mt-1 text-xs px-2 py-1 border rounded ${
+            nonEmptyFilters[index + 2] ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-800"
+          }`}
+        >
+          {nonEmptyFilters[index + 2] ? "非空" : "全て"}
+        </button>
         </div>
       </th>
     ))}
@@ -250,20 +307,20 @@ const Table = () => {
                         />
                       </label>
                       <div className="text-sm">{event}</div>
-                      <button
-                        onClick={() => {
-                          const newFilters = [...eventColumnFilters];
-                          newFilters[index] = eventColumnFilters[index] === "1" ? "all" : "1";
-                          setEventColumnFilters(newFilters);
-                        }}
-                        className={`mt-1 text-xs px-2 py-0.5 rounded ${
-                          eventColumnFilters[index ] === "1"
-                            ? "bg-green-400 text-white"
-                            : "bg-gray-200 text-gray-800"
-                        }`}
-                      >
-                        🔁 {eventColumnFilters[index ] === "1" ? "1" : "All"}
-                      </button>
+                       {/* Participation Filter toggle  */}
+
+                       <button
+          onClick={() => {
+            const newFilters = [...columnFilters];
+            newFilters[index + 12] = columnFilters[index + 12] === "1" ? "" : "1";
+            setColumnFilters(newFilters);
+          }}
+          className={`mt-1 text-xs px-2 py-1 border rounded ${
+            columnFilters[index + 12] ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-800"
+          }`}
+        >
+          {columnFilters[index + 12] ? "参加" : "全て"}
+        </button>
                     </div>
                   </th>
                 )
