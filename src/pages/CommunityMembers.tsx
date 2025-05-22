@@ -158,6 +158,11 @@ const Table = () => {
     setVisibleColumns(newState);
   };
 
+  const handleFileUpload = (userId, file) => {
+    console.log(`File uploaded for user ${userId}:`, file);
+    // Add logic to handle file upload (e.g., API call)
+  };
+
   const filteredUsers = users.filter((user) => {
     // Check static columns
     const staticColumns = [
@@ -363,7 +368,19 @@ const Table = () => {
               visibleColumns[index + 2] ? "" : "hidden"
             }`}
           >
-            {value}
+            {index === 0 ? ( // 活動地域_海外 column
+              <div className="flex flex-col items-center">
+              {/* <span>{value}</span> */}
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleFileUpload(user.id, e.target.files[0])}
+                  className="mt-1 text-xs"
+                />
+              </div>
+            ) : (
+              value
+            )}
           </td>
         ))}
                   {user.events.map((value, index) => (
