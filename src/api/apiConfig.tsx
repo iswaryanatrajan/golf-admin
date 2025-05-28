@@ -88,4 +88,8 @@ export const API_ENDPOINTS = {
   SETUPTEACHERPAYMENT: `${API_BASE_URL}/${API_VERSION}/set-up-teacher-payment`,
   UPDATETEACHERPAYMENT: `${API_BASE_URL}/${API_VERSION}/update-teacher-payment`,
   GETTEACHERPAYMENT: `${API_BASE_URL}/${API_VERSION}/get-teacher-payment`,
+
+  //members
+  GETCOMMUNITYMEMBERS: `${API_BASE_URL}/${API_VERSION}/get-community-members`,
+  UPLOADCOMMUNITYMEMBERS: `${API_BASE_URL}/${API_VERSION}/upload-community-members`,
 };
