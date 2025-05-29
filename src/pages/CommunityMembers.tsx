@@ -4,7 +4,7 @@ import DefaultLayout from '../layout/DefaultLayout';
 import axios from 'axios';
 import { API_ENDPOINTS } from '../api/apiConfig';
 
-const events = [
+/*const events = [
   "【5/20】 TASKGOLF lab ゴルフラウンド@群馬県",
   "【6/1】 TASKGOLF lab ゴルフラウンド@岡山県",
   "【5/31】 TASKGOLF lab 懇親会@岡山県",
@@ -16,7 +16,9 @@ const events = [
   "【4/19】中部イベント懇親会お申し込み",
   "【4/4】TASKGOLF lab 懇親会@福岡県",
   "【4/5】TASKGOLF lab ゴルフコンペ@山口県"
-];
+];*/
+
+const events = [];
 
 const Table = () => {
   const [filterIndex, setFilterIndex] = useState(null);
@@ -71,7 +73,7 @@ const Table = () => {
         });
         const data = response.data;
         console.log("Fetched users:", data); // Log the fetched users
-        //setUsers(data.users); // Assuming the API response has a `users` field
+       setUsers(data.communityMembers); // Assuming the API response has a `users` field
       } catch (error) {
         console.error("Error fetching community members:", error);
       }
@@ -98,16 +100,6 @@ const Table = () => {
     const formData = new FormData();
     formData.append("file", file);
 
-    if (!file.name.endsWith('.csv')) {
-      alert("Only .csv files are allowed.");
-      return;
-    }
-  
-    if (file.size > 5 * 1024 * 1024) {
-      alert("File too large (limit: 5MB).");
-      return;
-    }
-  
     console.log("Uploading file:", file);
     console.log("Token:", token);
     try {
@@ -131,16 +123,17 @@ const Table = () => {
   const filteredUsers = users.filter((user) => {
     // Check static columns
     const staticColumns = [
-      user.regionAbroad,
-      user.avgScore,
+      user.activityRegionAbroad,
+      user.averageScore,
       user.gender,
       user.email,
       user.phone,
       user.furigana,
-      user.region,
-      user.facePhoto,
+      user.activityRegion,
+      user.photo,
       user.businessCard,
-      user.name,
+      user.displayName,
+      user.fullName
     ];
 
     for (let i = 0; i < staticColumns.length; i++) {
@@ -151,7 +144,7 @@ const Table = () => {
     }
 
     // Check event columns
-    for (let i = 0; i < user.events.length; i++) {
+    for (let i = 0; i < user.events?.length; i++) {
       if (columnFilters[i + 12] && String(user.events[i]) !== columnFilters[i + 12]) {
         return false;
       }
@@ -278,7 +271,7 @@ const Table = () => {
                         )
                     )}
 
-                    {events.map(
+                    {events?.map(
                       (event, index) =>
                         visibleColumns[index + 12] && (
                           <th
@@ -340,16 +333,16 @@ const Table = () => {
                         </td>
                         {/* Other columns */}
                         {[
-                          user.regionAbroad,
-                          user.avgScore,
+                          user.activityRegionAbroad,
+                          user.averageScore,
                           user.gender,
                           user.email,
                           user.phone,
                           user.furigana,
-                          user.region,
-                          user.facePhoto,
+                          user.activityRegion,
+                          user.photo,
                           user.businessCard,
-                          user.name,
+                          user.fullName,
                         ].map((value, index) => (
                           <td
                             key={index + 2}
@@ -374,7 +367,7 @@ const Table = () => {
                             )}
                           </td>
                         ))}
-                        {user.events.map((value, index) => (
+                        {user.events?.map((value, index) => (
                           <td
                             key={index + 12}
                             className={`px-2 py-1 border-b border-r border-[#eee] dark:border-strokedark text-center ${
