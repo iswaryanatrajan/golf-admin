@@ -10,6 +10,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { EventsContext } from './contexts/EventContext';
 import { TeacherContext } from './contexts/TeachersContext';
 import { PostContext } from './contexts/PostContext';
+import { MembersContext } from './contexts/MembersContext';
 import { AllUsers } from './contexts/AllUsers';
 import { CategoryProvider } from './contexts/CategoryContext';
 import { SubscriptionProvider } from './contexts/SubscriptionContext';
@@ -21,6 +22,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         <EventsContext>
           <TeacherContext>
             <PostContext>
+              <MembersContext>
               <CategoryProvider>
                 <SubscriptionProvider>
                   <AllUsers>
@@ -28,6 +30,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                   </AllUsers>
                 </SubscriptionProvider>
               </CategoryProvider>
+              </MembersContext>
             </PostContext>
           </TeacherContext>
         </EventsContext>

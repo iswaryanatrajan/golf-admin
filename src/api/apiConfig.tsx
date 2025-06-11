@@ -92,4 +92,7 @@ export const API_ENDPOINTS = {
   //members
   GETCOMMUNITYMEMBERS: `${API_BASE_URL}/${API_VERSION}/get-community-members`,
   UPLOADCOMMUNITYMEMBERS: `${API_BASE_URL}/${API_VERSION}/upload-community-members`,
+  UPDATECOMMUNITYMEMBER: `${API_BASE_URL}/${API_VERSION}/update-community-member`,
+  DELETECOMMUNITYMEMBER: `${API_BASE_URL}/${API_VERSION}/delete-community-member`,
+  GETCOMMUNITYMEMBER_BY_ID: `${API_BASE_URL}/${API_VERSION}/get-community-member/`,
 };
