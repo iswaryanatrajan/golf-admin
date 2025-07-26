@@ -95,4 +95,11 @@ export const API_ENDPOINTS = {
   UPDATECOMMUNITYMEMBER: `${API_BASE_URL}/${API_VERSION}/update-community-member`,
   DELETECOMMUNITYMEMBER: `${API_BASE_URL}/${API_VERSION}/delete-community-member`,
   GETCOMMUNITYMEMBER_BY_ID: `${API_BASE_URL}/${API_VERSION}/get-community-member/`,
+
+  //courseseetings - event templates
+  GETTEMPLATEBYID: `${API_BASE_URL}/${API_VERSION}/get-course-event-by-id`,
+  GETTEMPLATES: `${API_BASE_URL}/${API_VERSION}/get-course-events`,
+  CREATETEMPLATE: `${API_BASE_URL}/${API_VERSION}/create-course-event`, 
+  UPDATETEMPLATE: `${API_BASE_URL}/${API_VERSION}/update-course-event`, 
+  DELETETEMPLATE: `${API_BASE_URL}/${API_VERSION}/delete-course-event`, 
 };

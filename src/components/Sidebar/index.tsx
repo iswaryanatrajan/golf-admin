@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import SidebarLinkGroup from './SidebarLinkGroup';
+import { TbTemplate } from "react-icons/tb";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -189,6 +190,18 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     />
                   </svg>
                   Events
+                </NavLink>
+              </li>
+               <li>
+                <NavLink
+                  to="/course-settings"
+                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes('profile') && 'bg-graydark dark:bg-meta-4'
+                    }`}
+                >
+
+               <TbTemplate />
+
+                  Course Settings
                 </NavLink>
               </li>
               <li>

@@ -21,14 +21,18 @@ import Events from './pages/Events';
 import Users from './pages/Users';
 import CommunityMembers from './pages/CommunityMembers';
 import UpdatePost from './pages/UpdatePost';
-
+import CourseSettings from './pages/CourseSettings';
+import { Toaster } from 'react-hot-toast';
 
 import { CategoryProvider } from './contexts/CategoryContext';
 
 function App() {
 
   const { isLoading, hastoken } = useAuth();
+
   console.log(hastoken, "sads")
+  
+
   const { pathname } = useLocation();
 
   useEffect(() => {
@@ -70,6 +74,16 @@ function App() {
             </>
           }
         />
+         <Route
+          path="/course-settings"
+          element={
+            <>
+              <PageTitle title="CourseSettings | Golf" />
+              <CourseSettings />
+            </>
+          }
+        />
+        
 
         <Route
           path="/inbox"
@@ -211,7 +225,20 @@ function App() {
       </Routes>) :
         <Login />
       }
-
+  <Toaster position="top-right" reverseOrder={false}  toastOptions={{
+    success: {
+      style: {
+        background: 'green',
+        color: 'white',
+      },
+    },
+    error: {
+      style: {
+        background: 'red',
+        color: 'white',
+      },
+    },
+  }} />
     </>
   )
 }
