@@ -102,4 +102,5 @@ export const API_ENDPOINTS = {
   CREATETEMPLATE: `${API_BASE_URL}/${API_VERSION}/create-course-event`, 
   UPDATETEMPLATE: `${API_BASE_URL}/${API_VERSION}/update-course-event`, 
   DELETETEMPLATE: `${API_BASE_URL}/${API_VERSION}/delete-course-event`, 
+  UPLOADTEMPLATE: `${API_BASE_URL}/${API_VERSION}/upload-course-event`,
 };

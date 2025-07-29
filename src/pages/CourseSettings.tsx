@@ -5,6 +5,7 @@ import DefaultLayout from "../layout/DefaultLayout";
 import { API_ENDPOINTS } from '../api/apiConfig';
 import { FaPen, FaTrash } from "react-icons/fa";
 import { toast } from 'react-hot-toast';
+import Papa from 'papaparse';
 
 interface Hole {
   holeNumber: number;
@@ -114,11 +115,89 @@ const CourseTemplatePage: React.FC = () => {
     fetchTemplates();
   };
 
+    const [uploading, setUploading] = useState(false);
+
+
+  const handleTemplatesFileUpload = async (file:any) => {
+    const token = localStorage.getItem("token");
+    const formData = new FormData();
+    formData.append("file", file);
+
+    console.log("Uploading file:", file);
+    console.log("Token:", token);
+    try {
+      setUploading(true);
+      const response = await axios.post(`${API_ENDPOINTS.UPLOADTEMPLATE}`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log("File uploaded successfully:", response.data);
+      toast.success("File uploaded successfully!");
+      fetchTemplates(); // Refresh templates after upload
+    } catch (error) {
+      console.error("Error uploading templates:", error);
+     toast.error("Failed to upload templates. Please try again.");
+    } finally {
+      setUploading(false);
+    }
+  }; 
+
+/*  const handleCSVUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+
+  Papa.parse(file, {
+    header: true,
+    skipEmptyLines: true,
+    complete: (results:any) => {
+      const parsed = results.data as any[];
+
+      const validTemplates = parsed.map((row, i) => {
+        const name = row.name?.trim();
+        const address = row.address?.trim();
+
+        const holes = Array.from({ length: 18 }, (_, index) => {
+          const par = parseInt(row[`hole${index + 1}`]);
+          return {
+            holeNumber: index + 1,
+            par: isNaN(par) ? 4 : par, // default to 4
+          };
+        });
+
+        if (!name || !address) {
+          console.warn(`Row ${i + 1} missing name or address`);
+          return null;
+        }
+
+        return { name, address, holes };
+      }).filter(Boolean); // remove invalid ones
+
+      setParsedTemplates(validTemplates);
+    }
+  });
+};*/
+
   return (
       <DefaultLayout>
       <Breadcrumb pageName="Course Settings" />
     <div  className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <h2 className="text-xl font-bold mb-4">Course Template</h2>
+
+        <div className="flex gap-2 items-center">
+          <label className="text-white bg-blue-500 hover:bg-blue-700 p-2 rounded-md cursor-pointer">
+              Upload CSV
+              <input
+                type="file"
+                accept=".csv"
+                onChange={(e) => handleTemplatesFileUpload(e.target.files[0])}
+                className="hidden"
+                disabled={uploading}
+              />
+            </label>
+          </div>
+
 <div ref={formRef} className='p-5 bg-gray-100 rounded-md shadow-sm mb-6'>
        <div className="mb-10 mt-1">
         {editingId ? (

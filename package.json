@@ -22,6 +22,7 @@
     "i18react": "^0.1.2",
     "jsvectormap": "^1.5.3",
     "match-sorter": "^6.3.1",
+    "papaparse": "^5.5.3",
     "react": "^18.2.0",
     "react-apexcharts": "^1.4.1",
     "react-dom": "^18.2.0",
