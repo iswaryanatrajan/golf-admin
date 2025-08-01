@@ -1,5 +1,6 @@
 import React, {  memo, useCallback, useEffect, useState } from 'react';
 import { getAllUsers, getUser, loginUser } from '../api/Users';
+import { useNavigate } from 'react-router-dom';
 interface IUser {
   nickName: string;
   email: string;
@@ -21,6 +22,8 @@ export const AuthContext = memo(({ children }: any) => {
     email: '',
     password: '',
   });
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (hasToken) {
@@ -54,8 +57,15 @@ export const AuthContext = memo(({ children }: any) => {
 
   const fetchUser = async () => {
     setIsLoading(true);
+
+    try {
     await getUser(id, store_token, handleUser);
+  } catch (error) {
+    console.error("Invalid token or user fetch failed", error);
+    navigate('/login'); // force logout if token is bad
+  } finally {
     setIsLoading(false);
+  }
   };
 
   const value = { handleUser, handleChange,handleSubmit,setToken, hastoken, id, user, isLoading };

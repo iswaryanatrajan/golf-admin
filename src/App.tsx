@@ -30,7 +30,7 @@ function App() {
 
   const { isLoading, hastoken } = useAuth();
 
-  console.log(hastoken, "sads")
+  console.log(hastoken, "token")
   
 
   const { pathname } = useLocation();
