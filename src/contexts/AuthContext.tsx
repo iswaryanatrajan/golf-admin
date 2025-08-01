@@ -32,6 +32,13 @@ export const AuthContext = memo(({ children }: any) => {
 
   }, [hasToken]);
 
+  useEffect(() => {
+  if (!store_token || !id) {
+    localStorage.removeItem("token"); // Optional: clear stale token
+    navigate("/login", { replace: true });
+  }
+}, [store_token, id, navigate]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
