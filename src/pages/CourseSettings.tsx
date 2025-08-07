@@ -16,6 +16,7 @@ interface Template {
   id?: string;
   name: string;
   address: string;
+  prefecture: string,
   holes: Hole[];
 }
 
@@ -28,6 +29,7 @@ const CourseTemplatePage: React.FC = () => {
   const [template, setTemplate] = useState<Template>({
     name: '',
     address: '',
+    prefecture: '',
     holes: initialHoles,
   });
 
@@ -35,6 +37,16 @@ const CourseTemplatePage: React.FC = () => {
   const [editingId, setEditingId] = useState<string | null>(null);
 
   const formRef = useRef<HTMLDivElement | null>(null);
+
+  const prefectures = [
+  "Hokkaido", "Aomori", "Iwate", "Miyagi", "Akita", "Yamagata", "Fukushima",
+  "Ibaraki", "Tochigi", "Gunma", "Saitama", "Chiba", "Tokyo", "Kanagawa",
+  "Niigata", "Toyama", "Ishikawa", "Fukui", "Yamanashi", "Nagano", "Gifu",
+  "Shizuoka", "Aichi", "Mie", "Shiga", "Kyoto", "Osaka", "Hyogo", "Nara", "Wakayama",
+  "Tottori", "Shimane", "Okayama", "Hiroshima", "Yamaguchi", "Tokushima", "Kagawa",
+  "Ehime", "Kochi", "Fukuoka", "Saga", "Nagasaki", "Kumamoto", "Oita", "Miyazaki",
+  "Kagoshima", "Okinawa"
+];
 
    const token = localStorage.getItem("token");
 
@@ -52,6 +64,8 @@ const CourseTemplatePage: React.FC = () => {
     setTemplates(res.data.courseEvents || []);
   };
 
+
+
   const handleParChange = (index: number, value: number) => {
     const newHoles = [...template.holes];
     newHoles[index].par = value;
@@ -66,8 +80,8 @@ const CourseTemplatePage: React.FC = () => {
       },
      });
     } else {
-      if (!template.name || !template.address) {
-  toast.error("Please enter template name and address.");
+      if (!template.name || !template.address || !template.prefecture) {
+  toast.error("Please enter template name, address and prefecture.");
   return;
 }
       await axios.post(API_ENDPOINTS.CREATETEMPLATE, template,{
@@ -77,7 +91,7 @@ const CourseTemplatePage: React.FC = () => {
      });
     }
     toast.success(editingId ? "Template updated!" : "Template created!");
-    setTemplate({ name: '', address: '', holes: initialHoles });
+    setTemplate({ name: '', address: '',prefecture:'', holes: initialHoles });
     setEditingId(null);
     fetchTemplates();
   };
@@ -227,6 +241,21 @@ const CourseTemplatePage: React.FC = () => {
           className="border px-2 py-1 rounded"
         />
         </div>
+           <div className=" mb-5">
+        <label className="mr-5">Prefecture:</label>
+        <select
+    value={template.prefecture}
+    onChange={(e) => setTemplate({ ...template, prefecture: e.target.value })}
+    className="border px-2 py-1 rounded"
+  >
+    <option value="">Select a prefecture</option>
+    {prefectures.map((pref) => (
+      <option key={pref} value={pref}>
+        {pref}
+      </option>
+    ))}
+  </select>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-6 md:grid-cols-6 sm:grid-cols-3 gap-4">
@@ -255,7 +284,7 @@ const CourseTemplatePage: React.FC = () => {
       className="bg-gray-300 text-gray-800 px-4 py-2 rounded"
       onClick={() => {
         setEditingId(null);
-        setTemplate({ name: '', address: '', holes: initialHoles });
+        setTemplate({ name: '', address: '',prefecture:'', holes: initialHoles });
       }}
     >
       Cancel
@@ -273,16 +302,20 @@ const CourseTemplatePage: React.FC = () => {
         {templates.length > 0 && (
         <div className="border-t mt-4 pt-4">    
 
-        <h3 className="text-lg font-semibold mb-2">Saved Templates</h3>
-
-      
-
+        <h3 className="text-lg font-semibold mb-2">Saved Course Settings</h3>
               <div className="overflow-x-auto rounded-sm border border-stroke shadow-default dark:border-strokedark dark:bg-boxdark rounded-md">
                 <table className="w-full table-auto">
                   <thead>
 <tr className="bg-gray-2 text-left dark:bg-meta-4">
   <th  className="py-5 px-4 text-left"><span className="font-semibold">Template Name</span></th>
   <th  className="py-5 px-4 text-left"><span className="font-semibold">Address</span></th>
+  <th  className="py-5 px-4 text-left"><span className="font-semibold">Prefecture</span></th>
+  {/* Add hole columns */}
+      {Array.from({ length: 18 }, (_, i) => (
+        <th key={`hole${i + 1}`} className="py-5 px-2 text-left">
+          <span className="font-semibold">{`Hole ${i + 1}`}</span>
+        </th>
+      ))}
   <th  className="py-5 px-4 text-left"><span className="font-semibold">Actions</span></th>
 </tr>
 
@@ -292,6 +325,13 @@ const CourseTemplatePage: React.FC = () => {
                     <tr key={t.id} className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                       <td className="py-5 px-4 text-left">{t.name}</td>
                       <td className="py-5 px-4 text-left">{t.address}</td>
+                      <td className="py-5 px-4 text-left">{t.prefecture}</td>
+                      {/* Render hole par values */}
+        {Array.from({ length: 18 }, (_, i) => (
+          <td key={`hole${i + 1}`} className="py-5 px-2 text-left">
+            {t.holes?.[i]?.par ?? ''}
+          </td>
+        ))}
                       <td className="py-5 px-4 text-left">
                          <button onClick={() => handleEdit(t)} aria-label="Edit">
                             <FaPen style={{ color: "#5f6cb8" }} />
