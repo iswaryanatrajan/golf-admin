@@ -5,7 +5,7 @@ import DefaultLayout from "../layout/DefaultLayout";
 import { API_ENDPOINTS } from '../api/apiConfig';
 import { FaPen, FaTrash } from "react-icons/fa";
 import { toast } from 'react-hot-toast';
-import Papa from 'papaparse';
+
 
 interface Hole {
   holeNumber: number;
@@ -34,7 +34,18 @@ const CourseTemplatePage: React.FC = () => {
   });
 
   const [templates, setTemplates] = useState<Template[]>([]);
-  const [editingId, setEditingId] = useState<string | null>(null);
+ // const [editingId, setEditingId] = useState<string | null>(null);
+
+
+ const [editingId, setEditingId] = useState(null);
+const [editForm, setEditForm] = useState({
+  name: '',
+  address: '',
+  prefecture: '',
+  holes: Array(18).fill({ par: '', holeNumber: '' }),
+});
+
+
 
   const formRef = useRef<HTMLDivElement | null>(null);
 
@@ -73,13 +84,13 @@ const CourseTemplatePage: React.FC = () => {
   };
 
   const handleSave = async () => {
-    if (editingId) {
+   /* if (editingId) {
       await axios.put(`${API_ENDPOINTS.UPDATETEMPLATE}/${editingId}`, template,{
       headers: {
         Authorization: `Bearer ${token}`,
       },
      });
-    } else {
+    } else {*/
       if (!template.name || !template.address || !template.prefecture) {
   toast.error("Please enter template name, address and prefecture.");
   return;
@@ -89,10 +100,11 @@ const CourseTemplatePage: React.FC = () => {
         Authorization: `Bearer ${token}`,
       },
      });
-    }
-    toast.success(editingId ? "Template updated!" : "Template created!");
+    //}
+   // toast.success(editingId ? "Template updated!" : "Template created!");
+   toast.success("Template created!");
     setTemplate({ name: '', address: '',prefecture:'', holes: initialHoles });
-    setEditingId(null);
+    //setEditingId(null);
     fetchTemplates();
   };
 
@@ -101,7 +113,7 @@ const CourseTemplatePage: React.FC = () => {
     setEditingId(template.id || null);
   };*/
 
-  const handleEdit = (template: Template) => {
+ /* const handleEdit = (template: Template) => {
   setTemplate(template); // populate form fields
   setEditingId(template.id || null); // if you track edit mode
 
@@ -117,6 +129,71 @@ const CourseTemplatePage: React.FC = () => {
   setTimeout(() => {
     formRef.current?.classList.remove("ring", "ring-blue-400");
   }, 1200);
+};*/
+
+
+const handleEdit = (template: Template) => {
+  console.log("Editing template:", template);
+  setEditingId(template.id);
+  setEditForm({
+    name: template.name || '',
+    address: template.address || '',
+    prefecture: template.prefecture || '',
+    holes: template.holes?.length
+      ? template.holes.map(h => ({
+          par: Number(h.par) || 0,
+          holeNumber: h.holeNumber ?? ''
+        }))
+      : Array.from({ length: 18 }, (_, i) => ({
+          par: 0,
+          holeNumber: i + 1
+        })),
+  });
+};
+
+const handleEditChange = (e:any) => {
+  const { name, value } = e.target;
+  setEditForm((prev) => ({ ...prev, [name]: value }));
+};
+
+const handleHoleChange = (index:number, value:number) => {
+  const newHoles = [...editForm.holes];
+  newHoles[index] = { par: Number(value), holeNumber: index + 1 };
+  setEditForm((prev) => ({ ...prev, holes: newHoles }));
+};
+
+const handleEditSave = async () => {
+  try {
+    const res = await axios.put(
+      `${API_ENDPOINTS.UPDATETEMPLATE}/${editingId}`,
+      editForm,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+
+    if (res.data) {
+      // Merge updated form into existing table
+      setTemplates((prev) =>
+        prev.map((t) =>
+          t.id === editingId
+            ? { ...t, ...editForm } // overwrite only the edited fields
+            : t
+        )
+      );
+
+      toast.success("Template updated!");
+      setEditingId(null);
+    } else {
+      toast.error("Failed to update template.");
+    }
+  } catch (error) {
+    console.error("Error updating template:", error);
+    toast.error("Failed to update template.");
+  }
+};
+const handleCancel = () => {
+  setEditingId(null);
 };
 
   const handleDelete = async (id?: string) => {
@@ -214,13 +291,16 @@ const CourseTemplatePage: React.FC = () => {
 
 <div ref={formRef} className='p-5 bg-gray-100 rounded-md shadow-sm mb-6'>
        <div className="mb-10 mt-1">
-        {editingId ? (
+       {/*} {editingId ? (
   <div className="text-blue-600 font-semibold mb-2">
     Now editing: {templates.find(t => t.id === editingId)?.name}
   </div>
 ):( <div className="text-blue-600 font-semibold mb-2">
     Create Template
-  </div>)}
+  </div>)}*/}
+  <div className="text-blue-600 font-semibold mb-2">
+    Create Template
+  </div>
         <div className=" mt-5 mb-5">
         <label className="mr-5">Template Name:</label>
         <input
@@ -277,9 +357,10 @@ const CourseTemplatePage: React.FC = () => {
           onClick={handleSave}
           className="bg-blue-500 text-white px-4 py-2 rounded-md focus:outline-none hover:bg-blue-600 transition-colors duration-200"
         >
-          {editingId ? 'Save Changes' : 'Create Template'}
+          {/* editingId ? 'Save Changes' : 'Create Template' */}
+          Create Template
         </button>
-         {editingId && (
+        {/* editingId && (
     <button
       className="bg-gray-300 text-gray-800 px-4 py-2 rounded"
       onClick={() => {
@@ -289,7 +370,7 @@ const CourseTemplatePage: React.FC = () => {
     >
       Cancel
     </button>
-  )}
+  )*/} 
 
 
       </div>
@@ -323,6 +404,55 @@ const CourseTemplatePage: React.FC = () => {
                   <tbody>
                         {templates.map((t) => (
                     <tr key={t.id} className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                         {editingId === t.id ? (
+        <>
+          <td className="py-5 px-4">
+            <input
+              type="text"
+              name="name"
+              value={editForm.name}
+              onChange={handleEditChange}
+              className="border px-2 py-1 rounded"
+            />
+          </td>
+          <td className="py-5 px-4">
+            <input
+              type="text"
+              name="address"
+              value={editForm.address}
+              onChange={handleEditChange}
+              className="border px-2 py-1 rounded"
+            />
+          </td>
+          <td className="py-5 px-4">
+            <select
+              name="prefecture"
+              value={editForm.prefecture}
+              onChange={handleEditChange}
+              className="border px-2 py-1 rounded"
+            >
+              <option value="">Select</option>
+              {prefectures.map((p) => (
+                <option key={p} value={p}>{p}</option>
+              ))}
+            </select>
+          </td>
+          {Array.from({ length: 18 }, (_, i) => (
+            <td key={`hole${i + 1}`} className="py-5 px-2">
+              <input
+                type="number"
+                value={editForm.holes[i]?.par || ''}
+                onChange={(e) => handleHoleChange(i, e.target.value)}
+                className="border px-1 py-1 rounded w-16"
+              />
+            </td>
+          ))}
+          <td className="py-5 px-4 flex gap-2">
+            <button onClick={handleEditSave} className="bg-green-500 text-white px-3 py-1 rounded">Save</button>
+            <button onClick={handleCancel} className="bg-gray-400 text-white px-3 py-1 rounded">Cancel</button>
+          </td>
+        </>
+      ) :( <>
                       <td className="py-5 px-4 text-left">{t.name}</td>
                       <td className="py-5 px-4 text-left">{t.address}</td>
                       <td className="py-5 px-4 text-left">{t.prefecture}</td>
@@ -343,8 +473,8 @@ const CourseTemplatePage: React.FC = () => {
                           >
                             <FaTrash style={{ color: "#5f6cb8" }} />
                           </button>
-                      </td>
-                      </tr>
+                      </td> </>)}
+                      </tr> 
                         ))}
                     </tbody>          
    
@@ -355,6 +485,7 @@ const CourseTemplatePage: React.FC = () => {
 
                 )}
         </div>
+
       </div>
     </DefaultLayout>
   );
