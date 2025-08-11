@@ -449,7 +449,7 @@ const handleCancel = () => {
           ))}
           <td className="py-5 px-4 flex gap-2">
             <button onClick={handleEditSave} className="bg-green-500 text-white px-3 py-1 rounded">Save</button>
-            <button onClick={handleCancel} className="bg-gray-400 text-white px-3 py-1 rounded">Cancel</button>
+            <button onClick={handleCancel} className="bg-blue-400 text-white px-3 py-1 rounded">Cancel</button>
           </td>
         </>
       ) :( <>
