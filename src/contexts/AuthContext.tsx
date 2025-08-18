@@ -10,7 +10,7 @@ interface IUser {
 const Context = React.createContext<any>({});
 
 export const AuthContext = memo(({ children }: any) => {
-  const store_token: string = localStorage.getItem('token') || '';
+  const store_token: string = localStorage.getItem('admin_token') || '';
   const id: string = localStorage.getItem('id') || '';
   const hasToken = !!store_token && !!id;
   
@@ -27,6 +27,7 @@ export const AuthContext = memo(({ children }: any) => {
 
   useEffect(() => {
     if (hasToken) {
+      console.log("Token exists, fetching user data...");
         fetchUser();
       }
 
@@ -34,7 +35,7 @@ export const AuthContext = memo(({ children }: any) => {
 
   useEffect(() => {
   if (!store_token || !id) {
-    localStorage.removeItem("token"); // Optional: clear stale token
+    localStorage.removeItem("admin_token"); // Optional: clear stale token
     navigate("/login", { replace: true });
   }
 }, [store_token, id, navigate]);
@@ -50,9 +51,14 @@ export const AuthContext = memo(({ children }: any) => {
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
     const success = await loginUser(formData, setToken);
-    if (success) {
+    const token = localStorage.getItem('admin_token');
+    if (success && token) {
+      console.log("Login successful, token:", token);
+      navigate('/');
+    }
+   /* if (success) {
         router('/')
-      }
+      }*/
   };
 
   const handleUser = useCallback(

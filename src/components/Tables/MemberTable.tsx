@@ -77,10 +77,10 @@ const MemberTable = () => {
     const [currentPage, setCurrentPage] = useState(1);
 
 
-
+ const token = localStorage.getItem("admin_token");
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+   
    fetchMembers(setLocalMembers, setCount, token, pageNumber, pageSize);
     console.log(localMembers, "localmembers");
     console.log(members, "members");
@@ -172,7 +172,7 @@ const MemberTable = () => {
   };
 
   const handleClientDataUpload = async (file) => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("admin_token");
     const formData = new FormData();
     formData.append("file", file);
 

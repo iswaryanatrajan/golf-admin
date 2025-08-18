@@ -32,9 +32,11 @@ export const loginUser = async (formData: any, setToken: any): Promise<boolean> 
   try {
     const response = await axios.post(API_ENDPOINTS.LOGIN, formData);
     if (response.status === 200) {
-      localStorage.setItem('token', response.data.jwtToken);
+      localStorage.setItem('admin_token', response.data.jwtToken);
       localStorage.setItem('id', response.data.id);
       setToken(true);
+      console.log("Login successful");
+      console.log("Token:", response.data.jwtToken);
       return true; 
     }
     return false;

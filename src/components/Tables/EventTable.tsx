@@ -10,11 +10,11 @@ const EventTable = () => {
   const [pageSize, setPageSize] = useState(10);
   const [count, setCount] = useState(0);
   const [localEvents, setLocalEvents] = useState(events); // local state for live update
+  const token = localStorage.getItem("admin_token");
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    fetchEvents(setLocalEvents, setCount, token, pageNumber, pageSize);
-  }, [refreshing]);
+      fetchEvents(setLocalEvents, setCount, token, pageNumber, pageSize);
+  }, [refreshing, token, pageNumber, pageSize]);
 
   const handleDelete = async (eventId: any, eventName: any) => {
     const confirmed = window.confirm("Are you sure you want to delete this event'" + eventName + "'?");

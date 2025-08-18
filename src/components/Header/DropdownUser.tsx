@@ -40,7 +40,7 @@ const DropdownUser = () => {
     return () => document.removeEventListener('keydown', keyHandler);
   });
   const handleLogOut= ()=>{
-    localStorage.removeItem('token');
+    localStorage.removeItem('admin_token');
     localStorage.removeItem('id');
     setToken(false);
   }

@@ -27,7 +27,7 @@ export const fetchEvents = async (setEvents:any,setCount:any, token:any, pageNum
 
 export const deleteEvent = async (eventId: any, isLoading:any) => {
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("admin_token");
       let endpoint = API_ENDPOINTS.DELETE_EVENT + eventId;
       const headers: any = {
         "ngrok-skip-browser-warning": "69420"

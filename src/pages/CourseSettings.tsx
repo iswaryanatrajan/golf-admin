@@ -59,7 +59,7 @@ const [editForm, setEditForm] = useState({
   "Kagoshima", "Okinawa"
 ];
 
-   const token = localStorage.getItem("token");
+   const token = localStorage.getItem("admin_token");
 
   useEffect(() => {
     fetchTemplates();
@@ -210,7 +210,7 @@ const handleCancel = () => {
 
 
   const handleTemplatesFileUpload = async (file:any) => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("admin_token");
     const formData = new FormData();
     formData.append("file", file);
 

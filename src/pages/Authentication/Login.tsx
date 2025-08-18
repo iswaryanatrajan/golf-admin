@@ -1,10 +1,11 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import ECommerce from '../Dashboard/ECommerce';
 
 const Login: React.FC = () => {
   const { handleSubmit, handleChange, hastoken } = useAuth();
+
 
  
   return (

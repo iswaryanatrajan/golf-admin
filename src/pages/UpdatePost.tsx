@@ -77,7 +77,7 @@ const UpdatePost: React.FC<any> = () => {
       return;
     }
   
-    const userToken = localStorage.getItem("token");
+    const userToken = localStorage.getItem("admin_token");
   
     try {
       const dataToSend = new FormData();
@@ -171,7 +171,7 @@ const UpdatePost: React.FC<any> = () => {
   };
 
   const handleUpdatePostMedia = async (formd: any) => {
-    const userToken = localStorage.getItem("token");
+    const userToken = localStorage.getItem("admin_token");
 
     try {
       if (!userToken) {

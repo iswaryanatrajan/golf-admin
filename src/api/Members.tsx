@@ -32,7 +32,7 @@ export const fetchMembers = async (setMembers: any, setCount: any, token: any, p
 
 export const deleteMember = async (memberId: any, isLoading:any) => {
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("admin_token");
 
       const response = await axios.delete(`${API_ENDPOINTS.DELETECOMMUNITYMEMBER}/${memberId}`, {
       headers: {
@@ -63,7 +63,7 @@ export const deleteMember = async (memberId: any, isLoading:any) => {
 
 export const updateMember = async (updatedUser: any) => {
   try {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("admin_token");
     const response = await axios.put(`${API_ENDPOINTS.UPDATECOMMUNITYMEMBER}/${updatedUser.id}`, updatedUser, {
       headers: {
         Authorization: `Bearer ${token}`,

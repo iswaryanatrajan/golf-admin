@@ -6,7 +6,7 @@ const AllUsersContext = React.createContext<any>({});
 
 export const AllUsers = ({children}:any)=>{
   
-    const store_token: string = localStorage.getItem('token') || '';
+    const store_token: string = localStorage.getItem('admin_token') || '';
     const [totalUsers, setTotalUsers] = useState<any[]>();
 
     useEffect(() => {

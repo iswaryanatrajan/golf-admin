@@ -26,7 +26,7 @@ export let headers:any = {
   }
   export const fetchSinglePosts = async (setSinglePosts: any, id: any) => {
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("admin_token");
       let endpoint = API_ENDPOINTS.GETPOSTBYID + id;
       if (token) {
         headers["Authorization"] = `Bearer ${token}`;
@@ -44,7 +44,7 @@ export let headers:any = {
   
 export const deletePost = async (postId: any,setMessage:any) => {
   try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("admin_token");
       let endpoint = API_ENDPOINTS.DELETEPOST +postId ;
       const headers: any = {
         "ngrok-skip-browser-warning": "69420"

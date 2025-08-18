@@ -42,7 +42,7 @@ const Table = () => {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("admin_token");
     fetchMembers(
       (updatedMembers: any) => {
         handlePageChange(1); // Reset page to 1

@@ -8,7 +8,7 @@ export const EventsContext = ({children}:any)=>{
   
 
     const [events, setEvents] = useState<any[]>([]);
-    const store_token: string = localStorage.getItem('token') || '';
+    const store_token: string = localStorage.getItem('admin_token') || '';
     const [eventsCount, setEventsCount] = useState<any[]>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [pageSize, setPageSize] = useState<number>(10);

@@ -18,7 +18,7 @@ export const PostContext = ({ children }: any) => {
 
     const [posts, setPosts] = useState<IPost[]>([]);
     const [postsCount, setPostsCount] = useState<string>();
-    const store_token: string = localStorage.getItem('token') || '';
+    const store_token: string = localStorage.getItem('admin_token') || '';
     const [singlePost, setSinglePost] = useState<any>();
     const [postId, setPostId] = useState<any>();
     const [deletepostId, setDeletePostId] = useState<any>();

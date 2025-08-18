@@ -7,7 +7,7 @@ export const postCategory = async (formdata:any,setLoading:any) => {
     
       const response = await axios.post(API_ENDPOINTS.POSTCATEGORY,formdata, {
         headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            Authorization: `Bearer ${localStorage.getItem('admin_token')}`,
           },   
          
       });
@@ -21,7 +21,7 @@ export const getCategory = async (setCategory:any,setLoading:any) => {
     
       const response = await axios.get(API_ENDPOINTS.GETCATEGORY, {
         headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            Authorization: `Bearer ${localStorage.getItem('admin_token')}`,
           },   
          
       });
@@ -37,7 +37,7 @@ export const getCategories = async (setCategories:any,setLoading:any) => {
     
       const response = await axios.get(API_ENDPOINTS.GETALLCATEGORIES, {
         headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            Authorization: `Bearer ${localStorage.getItem('admin_token')}`,
           },   
          
       });
@@ -54,7 +54,7 @@ export const putCategories = async (formdata:any,userId:any, setLoading:any) => 
     
       const response = await axios.put(API_ENDPOINTS.PUTCATEGORY + userId, formdata, {
         headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            Authorization: `Bearer ${localStorage.getItem('admin_token')}`,
           },   
   
       });
@@ -70,7 +70,7 @@ export const unassignCategories = async (formdata:any,userId:any, setLoading:any
     
       const response = await axios.put(API_ENDPOINTS.UNASSIGNCATEGORY + userId, formdata, {
         headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            Authorization: `Bearer ${localStorage.getItem('admin_token')}`,
           },   
          
       });
@@ -84,7 +84,7 @@ export const unassignCategories = async (formdata:any,userId:any, setLoading:any
     try {
       const response = await axios.delete(`${API_ENDPOINTS.DELETECATEGORY}/${categoryId}`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${localStorage.getItem('admin_token')}`,
         },
       });
       console.log('Category deleted successfully:', response.data);
@@ -100,7 +100,7 @@ export const unassignCategories = async (formdata:any,userId:any, setLoading:any
     try {
       const response = await axios.put(`${API_ENDPOINTS.UPDATECATEGORY}/${categoryId}`, {"categoryName":formdata}, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${localStorage.getItem('admin_token')}`,
         },
       });
       toast.success('Category updated successfully!');
