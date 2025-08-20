@@ -5,7 +5,8 @@ import DefaultLayout from "../layout/DefaultLayout";
 import { API_ENDPOINTS } from '../api/apiConfig';
 import { FaPen, FaTrash } from "react-icons/fa";
 import { toast } from 'react-hot-toast';
-
+import Select from "react-select";
+import { GroupBase, OptionsOrGroups } from "react-select";
 
 interface Hole {
   holeNumber: number;
@@ -49,14 +50,15 @@ const [editForm, setEditForm] = useState({
 
   const formRef = useRef<HTMLDivElement | null>(null);
 
-  const prefectures = [
-  "Hokkaido", "Aomori", "Iwate", "Miyagi", "Akita", "Yamagata", "Fukushima",
-  "Ibaraki", "Tochigi", "Gunma", "Saitama", "Chiba", "Tokyo", "Kanagawa",
-  "Niigata", "Toyama", "Ishikawa", "Fukui", "Yamanashi", "Nagano", "Gifu",
-  "Shizuoka", "Aichi", "Mie", "Shiga", "Kyoto", "Osaka", "Hyogo", "Nara", "Wakayama",
-  "Tottori", "Shimane", "Okayama", "Hiroshima", "Yamaguchi", "Tokushima", "Kagawa",
-  "Ehime", "Kochi", "Fukuoka", "Saga", "Nagasaki", "Kumamoto", "Oita", "Miyazaki",
-  "Kagoshima", "Okinawa"
+const prefectures = [
+  "北海道 (Hokkaido)",
+  "青森県 (Aomori Prefecture)", "岩手県 (Iwate Prefecture)", "宮城県 (Miyagi Prefecture)", "秋田県 (Akita Prefecture)", "山形県 (Yamagata Prefecture)", "福島県 (Fukushima Prefecture)",
+  "茨城県 (Ibaraki Prefecture)", "栃木県 (Tochigi Prefecture)", "群馬県 (Gunma Prefecture)", "埼玉県 (Saitama Prefecture)", "千葉県 (Chiba Prefecture)", "東京都 (Tokyo)",
+  "神奈川県 (Kanagawa Prefecture)", "新潟県 (Niigata Prefecture)", "富山県 (Toyama Prefecture)", "石川県 (Ishikawa Prefecture)", "福井県 (Fukui Prefecture)", "山梨県 (Yamanashi Prefecture)", "長野県 (Nagano Prefecture)", "岐阜県 (Gifu Prefecture)",
+  "静岡県 (Shizuoka Prefecture)", "愛知県 (Aichi Prefecture)", "三重県 (Mie Prefecture)", "滋賀県 (Shiga Prefecture)", "京都府 (Kyoto)", "大阪府 (Osaka)", "兵庫県 (Hyogo Prefecture)", "奈良県 (Nara Prefecture)", "和歌山県 (Wakayama Prefecture)",
+  "鳥取県 (Tottori Prefecture)", "島根県 (Shimane Prefecture)", "岡山県 (Okayama Prefecture)", "広島県 (Hiroshima Prefecture)", "山口県 (Yamaguchi Prefecture)", "徳島県 (Tokushima Prefecture)", "香川県 (Kagawa Prefecture)",
+  "愛媛県 (Ehime Prefecture)", "高知県 (Kochi Prefecture)", "福岡県 (Fukuoka Prefecture)", "佐賀県 (Saga Prefecture)", "長崎県 (Nagasaki Prefecture)", "熊本県 (Kumamoto Prefecture)", "大分県 (Oita Prefecture)", "宮崎県 (Miyazaki Prefecture)",
+  "鹿児島県 (Kagoshima Prefecture)", "沖縄県 (Okinawa Prefecture)"
 ];
 
    const token = localStorage.getItem("admin_token");
